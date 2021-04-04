@@ -15,7 +15,7 @@ import java.util.stream.IntStream;
 public class ParallelMultiApiLimiterTest {
     private final static int NUMBER_OF_APIS = 5;
     private final static String API_NAME = "/api/test";
-    private final static String TOKEN = "alkmncbvxerop";
+    private final static String CLIENT = "alkmncbvxerop";
 
     @Test
     @DisplayName("MaxCalls = 5, Interval = 10sec -> Should allow 25 calls to 5 APIs")
@@ -148,7 +148,7 @@ public class ParallelMultiApiLimiterTest {
 
         @Override
         public Boolean get() {
-            boolean consumed = ApiLimiter.consume(API_NAME + "/" + restIndex, TOKEN);
+            boolean consumed = ApiLimiter.consume(API_NAME + "/" + restIndex, CLIENT);
             if (consumed)
                 System.out.println(String.format("[Task %s] consumed API %s", threadNum, API_NAME + "/" + restIndex));
             else

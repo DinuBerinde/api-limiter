@@ -15,7 +15,7 @@ import java.util.stream.IntStream;
 
 public class ParallelApiLimiterTest {
     private final static String API_NAME = "/api/test";
-    private final static String TOKEN = "alkmncbvxerop";
+    private final static String CLIENT = "alkmncbvxerop";
 
 
     @Test
@@ -141,7 +141,7 @@ public class ParallelApiLimiterTest {
 
         @Override
         public Boolean get() {
-            boolean consumed = ApiLimiter.consume(API_NAME, TOKEN);
+            boolean consumed = ApiLimiter.consume(API_NAME, CLIENT);
             if (consumed)
                 System.out.println(String.format("[Task %s] consumed API", threadNum));
             else
