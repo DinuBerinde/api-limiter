@@ -37,11 +37,11 @@ public final class ApiLimiter {
     public static boolean consume(String apiName, String token) {
 
         if (apiName == null) {
-            throw new RuntimeException("Api name cannot be null");
+            throw new ApiLimiterException("Api name cannot be null");
         }
 
         if (token == null) {
-            throw new RuntimeException("Token cannot be null");
+            throw new ApiLimiterException("Token cannot be null");
         }
 
         Limiter limiter;
@@ -49,7 +49,7 @@ public final class ApiLimiter {
             if (INSTANCE.limiters.containsKey(apiName)) {
                 limiter = INSTANCE.limiters.get(apiName);
             } else {
-                throw new RuntimeException(String.format("Api name %s not found", apiName));
+                throw new ApiLimiterException(String.format("API %s not registered", apiName));
             }
         }
 

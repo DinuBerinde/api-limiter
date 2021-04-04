@@ -1,4 +1,5 @@
 import api.limiter.ApiLimiter;
+import api.limiter.ApiLimiterException;
 import api.limiter.internal.ApiConfig;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -12,7 +13,52 @@ public class ApiLimiterTest {
     private final static String TOKEN = "alkmncbvxerop";
 
     @Test
-    @DisplayName("MaxCalls = 5, Interval = 10sec -> Should allow 5 calls to api")
+    @DisplayName("Should launch an ApiLimiterException when consuming a null API")
+    public void shouldFailOnNullApiName() {
+        ApiLimiter.registerApis(new ApiConfig(API_NAME));
+
+        try {
+            ApiLimiter.consume(null, TOKEN);
+        } catch (ApiLimiterException e) {
+            Assertions.assertEquals("Api name cannot be null", e.getMessage());
+            return;
+        }
+
+        Assertions.fail();
+    }
+
+    @Test
+    @DisplayName("Should launch an ApiLimiterException when consuming an API with a null token")
+    public void shouldFailOnNullToken() {
+        ApiLimiter.registerApis(new ApiConfig(API_NAME));
+
+        try {
+            ApiLimiter.consume(API_NAME, null);
+        } catch (ApiLimiterException e) {
+            Assertions.assertEquals("Token cannot be null", e.getMessage());
+            return;
+        }
+
+        Assertions.fail();
+    }
+
+    @Test
+    @DisplayName("Should launch an ApiLimiterException when consuming an unregistered API")
+    public void shouldFailOnUnregisteredAPI() {
+        ApiLimiter.registerApis(new ApiConfig(API_NAME));
+
+        try {
+            ApiLimiter.consume("/api/failingApi", TOKEN);
+        } catch (ApiLimiterException e) {
+            Assertions.assertEquals("API /api/failingApi not registered", e.getMessage());
+            return;
+        }
+
+        Assertions.fail();
+    }
+
+    @Test
+    @DisplayName("MaxCalls = 5, Interval = 10sec -> Should allow 5 calls to API")
     public void shouldAllow5Calls() {
         ApiLimiter.registerApis(new ApiConfig(API_NAME));
 
@@ -25,7 +71,7 @@ public class ApiLimiterTest {
     }
 
     @Test
-    @DisplayName("MaxCalls = 5, Interval = 10sec -> Should limit 6 calls to api")
+    @DisplayName("MaxCalls = 5, Interval = 10sec -> Should limit 6 calls to API")
     public void shouldLimit6Calls() {
         ApiLimiter.registerApis(new ApiConfig(API_NAME));
 
@@ -39,7 +85,7 @@ public class ApiLimiterTest {
     }
 
     @Test
-    @DisplayName("MaxCalls = 8, Interval = 5sec -> Should allow 8 calls on api")
+    @DisplayName("MaxCalls = 8, Interval = 5sec -> Should allow 8 calls on API")
     public void shouldAllow8Calls() {
         ApiLimiter.registerApis(new ApiConfig(API_NAME, 8, 5 * 1000));
 

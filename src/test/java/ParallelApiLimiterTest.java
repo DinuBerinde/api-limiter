@@ -19,7 +19,7 @@ public class ParallelApiLimiterTest {
 
 
     @Test
-    @DisplayName("MaxCalls = 5, Interval = 10sec -> Should allow 5 calls to api")
+    @DisplayName("MaxCalls = 5, Interval = 10sec -> Should allow 5 calls to API")
     public void shouldAllow5Calls() throws InterruptedException {
         int NUMBER_OF_THREADS = 5;
         ApiLimiter.registerApis(new ApiConfig(API_NAME));
@@ -38,7 +38,7 @@ public class ParallelApiLimiterTest {
     }
 
     @Test
-    @DisplayName("MaxCalls = 5, Interval = 10sec -> Should limit 6 calls to api")
+    @DisplayName("MaxCalls = 5, Interval = 10sec -> Should limit 6 calls to API")
     public void shouldLimit6Calls() {
         int NUMBER_OF_THREADS = 6;
         ApiLimiter.registerApis(new ApiConfig(API_NAME));
@@ -57,7 +57,7 @@ public class ParallelApiLimiterTest {
     }
 
     @Test
-    @DisplayName("MaxCalls = 8, Interval = 5sec -> Should allow 8 calls on api")
+    @DisplayName("MaxCalls = 8, Interval = 5sec -> Should allow 8 calls on API")
     public void shouldAllow8Calls() {
         int NUMBER_OF_THREADS = 8;
         ApiLimiter.registerApis(new ApiConfig(API_NAME, 8, 5 * 1000));
@@ -95,7 +95,7 @@ public class ParallelApiLimiterTest {
     }
 
     @Test
-    @DisplayName("MaxCalls = 50, Interval = 5sec -> Should allow 50 calls on api")
+    @DisplayName("MaxCalls = 50, Interval = 5sec -> Should allow 50 calls on API")
     public void shouldAllow50Calls() {
         int NUMBER_OF_THREADS = 50;
         ApiLimiter.registerApis(new ApiConfig(API_NAME, 50, 5 * 1000));
@@ -143,9 +143,9 @@ public class ParallelApiLimiterTest {
         public Boolean get() {
             boolean consumed = ApiLimiter.consume(API_NAME, TOKEN);
             if (consumed)
-                System.out.println(String.format("[Task %s] consumed api", threadNum));
+                System.out.println(String.format("[Task %s] consumed API", threadNum));
             else
-                System.out.println(String.format("[Task %s] exceeded api call limit", threadNum));
+                System.out.println(String.format("[Task %s] exceeded API call limit", threadNum));
 
             return consumed;
         }
