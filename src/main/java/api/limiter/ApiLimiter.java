@@ -9,13 +9,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Thread safe class to consume and limit API calls on behalf of a client without
+ * Thread safe class to consume API calls on behalf of a client without
  * exceeding the API's maximum number of calls in a given time interval.
  */
 @ThreadSafe
 public final class ApiLimiter {
     private final static ApiLimiter INSTANCE = new ApiLimiter();
-    private final Map<String, Limiter> limiters = new HashMap<>();
+    private final Map<String, Map<String, Limiter>> apiLimiterMap = new HashMap<>();
 
     private ApiLimiter() {}
 
@@ -24,35 +24,54 @@ public final class ApiLimiter {
      * @param apis the apis
      */
     public static void registerApis(ApiConfig... apis) {
-        Arrays.stream(apis).forEach(api -> INSTANCE.limiters.put(api.getApiName(), new Limiter(api)));
+        synchronized (INSTANCE) {
+            Arrays.stream(apis).forEach(api -> INSTANCE.apiLimiterMap.computeIfAbsent(api.getApiName(), k -> new HashMap<>()).put(api.getClient(), new Limiter(api)));
+        }
     }
 
     /**
-     * Consumes an API on behalf of the specified token.
+     * Consumes an API on behalf of all clients.
      * @param apiName the api name
-     * @param token the token
-     * @return true if consumed successfully, false if the number of the current API call exceeds
-     * the configured API maximum calls in the configured API interval
+     * @return true if consumed successfully, false if the current API call exceeds
+     * the configured API maximum calls in the configured API time interval
      */
-    public static boolean consume(String apiName, String token) {
+    public static boolean consume(String apiName) {
+        return consume(apiName, ApiConfig.ALL_CLIENTS);
+    }
+
+    /**
+     * Consumes an API on behalf of a client.
+     * @param apiName the api name
+     * @param client the client name. Ignored if the API was configured for all clients
+     * @return true if consumed successfully, false if the current API call exceeds
+     * the configured API maximum calls in the configured API time interval
+     */
+    public static boolean consume(String apiName, String client) {
 
         if (apiName == null) {
-            throw new ApiLimiterException("Api name cannot be null");
-        }
-
-        if (token == null) {
-            throw new ApiLimiterException("Token cannot be null");
+            throw new ApiLimiterException("API name cannot be null");
         }
 
         Limiter limiter;
         synchronized (INSTANCE) {
-            if (INSTANCE.limiters.containsKey(apiName)) {
-                limiter = INSTANCE.limiters.get(apiName);
+            if (INSTANCE.apiLimiterMap.containsKey(apiName)) {
+                Map<String, Limiter> clientLimiterMap = INSTANCE.apiLimiterMap.get(apiName);
+
+                if (clientLimiterMap.containsKey(ApiConfig.ALL_CLIENTS)) {
+                    limiter = clientLimiterMap.get(ApiConfig.ALL_CLIENTS);
+                } else if (client == null) {
+                    throw new ApiLimiterException("Client cannot be null");
+                } else if (clientLimiterMap.containsKey(client)) {
+                    limiter = clientLimiterMap.get(client);
+                } else {
+                    throw new ApiLimiterException(String.format("Client %s non found for API %s", client, apiName));
+                }
+
             } else {
                 throw new ApiLimiterException(String.format("API %s not registered", apiName));
             }
         }
 
-        return limiter.consume(token);
+        return limiter.consume(client);
     }
 }

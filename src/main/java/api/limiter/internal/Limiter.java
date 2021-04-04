@@ -6,40 +6,41 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Thread safe class limit API calls.
+ * Thread safe class to limit API calls made by clients.
  */
 @ThreadSafe
 public final class Limiter {
-    private final Map<String, ApiCall> limits = new HashMap<>();
+    private final Map<String, ApiCall> clients = new HashMap<>();
     private final ApiConfig apiConfig;
+
 
     public Limiter(ApiConfig apiConfig) {
         this.apiConfig = apiConfig;
     }
 
     /**
-     * Consumes an API call on behalf of the specified token.
-     * @param token the token
-     * @return true if consumed successfully, false if the number of the current API call exceeds
-     * the configured API maximum calls in the configured API interval
+     * Consumes an API call on behalf of a client.
+     * @param client the client
+     * @return true if consumed successfully, false if the current API call exceeds
+     * the configured API maximum calls in the configured API time interval
      */
-    public boolean consume(String token) {
+    public boolean consume(String client) {
 
         synchronized (this) {
 
-            if (this.limits.containsKey(token)) {
-                ApiCall apiCall = this.limits.get(token);
+            if (this.clients.containsKey(client)) {
+                ApiCall apiCall = this.clients.get(client);
 
                 if (intervalExpired(apiCall)) {
-                    this.limits.put(token, new ApiCall(1, System.currentTimeMillis()));
+                    this.clients.put(client, new ApiCall(1, System.currentTimeMillis()));
                 } else if (callLimitExceeded(apiCall)) {
                     return false;
                 } else {
-                    this.limits.put(token, new ApiCall(apiCall.getNumberOfCalls() + 1, apiCall.getTime()));
+                    this.clients.put(client, new ApiCall(apiCall.getNumberOfCalls() + 1, apiCall.getTime()));
                 }
 
             } else {
-                this.limits.put(token, new ApiCall(1, System.currentTimeMillis()));
+                this.clients.put(client, new ApiCall(1, System.currentTimeMillis()));
             }
         }
 
