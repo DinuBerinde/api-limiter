@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Thread safe class to limit API calls made by clients.
+ * Thread safe class to limit API calls that a client can make within a certain timeframe.
  */
 @ThreadSafe
 public final class Limiter {
@@ -22,7 +22,7 @@ public final class Limiter {
      * Consumes an API call on behalf of a client.
      * @param client the client
      * @return true if consumed successfully, false if the current API call exceeds
-     * the configured API maximum calls in the configured API time interval
+     * the configured API maximum calls within the configured API timeframe
      */
     public boolean consume(String client) {
 
@@ -31,16 +31,16 @@ public final class Limiter {
             if (this.clients.containsKey(client)) {
                 ApiCall apiCall = this.clients.get(client);
 
-                if (intervalExpired(apiCall)) {
-                    this.clients.put(client, new ApiCall(1, System.currentTimeMillis()));
+                if (timeframeExpired(apiCall)) {
+                    this.clients.put(client, new ApiCall(1, System.currentTimeMillis(), client, apiConfig.getApiName()));
                 } else if (callLimitExceeded(apiCall)) {
                     return false;
                 } else {
-                    this.clients.put(client, new ApiCall(apiCall.getNumberOfCalls() + 1, apiCall.getTime()));
+                    this.clients.put(client, new ApiCall(apiCall.getNumberOfCalls() + 1, apiCall.getTime(), apiCall.getClient(), apiCall.getApi()));
                 }
 
             } else {
-                this.clients.put(client, new ApiCall(1, System.currentTimeMillis()));
+                this.clients.put(client, new ApiCall(1, System.currentTimeMillis(), client, apiConfig.getApiName()));
             }
         }
 
@@ -57,12 +57,12 @@ public final class Limiter {
     }
 
     /**
-     * It checks whether the current API call is not expired, hence it checks whether
-     * the time of the call is eligible with respect to the configured time interval of the API.
+     * It checks whether the timeframe of the current API call is not expired, hence it checks whether
+     * the timeframe of the call is eligible with respect to the configured timeframe of the API.
      * @param apiCall the api call
-     * @return true if the interval expired, false otherwise
+     * @return true if the timeframe expired, false otherwise
      */
-    private boolean intervalExpired(ApiCall apiCall) {
-        return System.currentTimeMillis() - apiCall.getTime() > apiConfig.getInterval();
+    private boolean timeframeExpired(ApiCall apiCall) {
+        return System.currentTimeMillis() - apiCall.getTime() > apiConfig.getTimeFrame();
     }
 }

@@ -18,7 +18,7 @@ public class ParallelMultiApiLimiterTest {
     private final static String CLIENT = "alkmncbvxerop";
 
     @Test
-    @DisplayName("MaxCalls = 5, Interval = 10sec -> Should allow 25 calls to 5 APIs")
+    @DisplayName("MaxCalls = 5, Timeframe = 10sec -> Should allow 25 calls to 5 APIs")
     public void shouldAllow25Calls() {
         int NUMBER_OF_THREADS = 25;
 
@@ -42,7 +42,7 @@ public class ParallelMultiApiLimiterTest {
     }
 
     @Test
-    @DisplayName("MaxCalls = 5, Interval = 10sec -> Should limit 1 call out of 26 calls to 5 APIs")
+    @DisplayName("MaxCalls = 5, Timeframe = 10sec -> Should limit 1 call out of 26 calls to 5 APIs")
     public void shouldFailOn26Calls() {
         int NUMBER_OF_THREADS = 26;
 
@@ -66,7 +66,7 @@ public class ParallelMultiApiLimiterTest {
     }
 
     @Test
-    @DisplayName("MaxCalls = 5, Interval = 10sec -> Should limit exactly 1 call out of 26 calls to 5 APIs")
+    @DisplayName("MaxCalls = 5, Timeframe = 10sec -> Should limit exactly 1 call out of 26 calls to 5 APIs")
     public void shouldFailOn26CallsFailing1() {
         int NUMBER_OF_THREADS = 26;
 
@@ -90,7 +90,7 @@ public class ParallelMultiApiLimiterTest {
     }
 
     @Test
-    @DisplayName("MaxCalls = 5, Interval = 10sec -> Should limit exactly 25 calls out of 50 calls to 5 APIs")
+    @DisplayName("MaxCalls = 5, Timeframe = 10sec -> Should limit exactly 25 calls out of 50 calls to 5 APIs")
     public void shouldFailOn50Calls() {
         int NUMBER_OF_THREADS = 50;
 
@@ -114,7 +114,7 @@ public class ParallelMultiApiLimiterTest {
     }
 
     @Test
-    @DisplayName("MaxCalls = 5, Interval = 10sec -> Should allow exactly 25 calls out of 38 calls to 5 APIs")
+    @DisplayName("MaxCalls = 5, Timeframe = 10sec -> Should allow exactly 25 calls out of 38 calls to 5 APIs")
     public void shouldAllowExactly25Calls() {
         int NUMBER_OF_THREADS = 38;
 

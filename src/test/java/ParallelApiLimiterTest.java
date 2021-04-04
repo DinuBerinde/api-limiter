@@ -19,7 +19,7 @@ public class ParallelApiLimiterTest {
 
 
     @Test
-    @DisplayName("MaxCalls = 5, Interval = 10sec -> Should allow 5 calls to API")
+    @DisplayName("MaxCalls = 5, Timeframe = 10sec -> Should allow 5 calls to API")
     public void shouldAllow5Calls() {
         int NUMBER_OF_THREADS = 5;
         ApiLimiter.registerApis(new ApiConfig(API_NAME));
@@ -38,7 +38,7 @@ public class ParallelApiLimiterTest {
     }
 
     @Test
-    @DisplayName("MaxCalls = 5, Interval = 10sec -> Should limit 1 call out of 6 calls to API")
+    @DisplayName("MaxCalls = 5, Timeframe = 10sec -> Should limit 1 call out of 6 calls to API")
     public void shouldFailOn6Calls() {
         int NUMBER_OF_THREADS = 6;
         ApiLimiter.registerApis(new ApiConfig(API_NAME));
@@ -57,7 +57,7 @@ public class ParallelApiLimiterTest {
     }
 
     @Test
-    @DisplayName("MaxCalls = 8, Interval = 5sec -> Should allow 8 calls on API")
+    @DisplayName("MaxCalls = 8, Timeframe = 5sec -> Should allow 8 calls on API")
     public void shouldAllow8Calls() {
         int NUMBER_OF_THREADS = 8;
         ApiLimiter.registerApis(new ApiConfig(API_NAME, 8, 5 * 1000));
@@ -76,7 +76,7 @@ public class ParallelApiLimiterTest {
     }
 
     @Test
-    @DisplayName("MaxCalls = 8, Interval = 5sec -> Should limit 2 calls out of 10 calls")
+    @DisplayName("MaxCalls = 8, Timeframe = 5sec -> Should limit 2 calls out of 10 calls")
     public void shouldFailOn10Calls() {
         int NUMBER_OF_THREADS = 10;
         ApiLimiter.registerApis(new ApiConfig(API_NAME, 8, 5 * 1000));
@@ -95,7 +95,7 @@ public class ParallelApiLimiterTest {
     }
 
     @Test
-    @DisplayName("MaxCalls = 50, Interval = 5sec -> Should allow 50 calls on API")
+    @DisplayName("MaxCalls = 50, Timeframe = 5sec -> Should allow 50 calls on API")
     public void shouldAllow50Calls() {
         int NUMBER_OF_THREADS = 50;
         ApiLimiter.registerApis(new ApiConfig(API_NAME, 50, 5 * 1000));
@@ -114,7 +114,7 @@ public class ParallelApiLimiterTest {
     }
 
     @Test
-    @DisplayName("MaxCalls = 100, Interval = 5sec -> Should limit 1 call out of 101 calls")
+    @DisplayName("MaxCalls = 100, Timeframe = 5sec -> Should limit 1 call out of 101 calls")
     public void shouldFailOn101Calls() {
         int NUMBER_OF_THREADS = 101;
         ApiLimiter.registerApis(new ApiConfig(API_NAME, 100, 5 * 1000));

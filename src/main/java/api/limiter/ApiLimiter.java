@@ -9,8 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Thread safe class to consume API calls on behalf of a client without
- * exceeding the API's maximum number of calls in a given time interval.
+ * Thread safe class to consume API calls on behalf of a client or clients and
+ * it limits the API calls that a client can make within a certain timeframe.
  */
 @ThreadSafe
 public final class ApiLimiter {
@@ -40,11 +40,11 @@ public final class ApiLimiter {
     }
 
     /**
-     * Consumes an API on behalf of a client.
+     * Consumes an API on behalf of a specific client.
      * @param apiName the api name
      * @param client the client name. Ignored if the API was configured for all clients
      * @return true if consumed successfully, false if the current API call exceeds
-     * the configured API maximum calls in the configured API time interval
+     * the configured API maximum calls within the configured API timeframe
      */
     public static boolean consume(String apiName, String client) {
 
