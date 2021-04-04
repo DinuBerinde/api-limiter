@@ -71,8 +71,8 @@ public class ApiLimiterTest {
     }
 
     @Test
-    @DisplayName("MaxCalls = 5, Interval = 10sec -> Should limit 6 calls to API")
-    public void shouldLimit6Calls() {
+    @DisplayName("MaxCalls = 5, Interval = 10sec -> Should limit 1 call out of 6 calls to API")
+    public void shouldFailOn6Calls() {
         ApiLimiter.registerApis(new ApiConfig(API_NAME));
 
         List<Boolean> consumers = new ArrayList<>(5);
@@ -98,7 +98,7 @@ public class ApiLimiterTest {
     }
 
     @Test
-    @DisplayName("MaxCalls = 8, Interval = 5sec -> Should limit 10 calls")
+    @DisplayName("MaxCalls = 8, Interval = 5sec -> Should limit 2 calls out of 10 calls")
     public void shouldFailOn10Calls() {
         ApiLimiter.registerApis(new ApiConfig(API_NAME, 8, 5 * 1000));
 
@@ -130,8 +130,8 @@ public class ApiLimiterTest {
     }
 
     @Test
-    @DisplayName("MaxCalls = 5, Interval = 3sec -> Should limit consuming 12 calls: 5 calls + interval reset + 5 calls + 2 calls")
-    public void shouldLimit12CallsWithIntervalReset() throws InterruptedException {
+    @DisplayName("MaxCalls = 5, Interval = 3sec -> Should fail consuming 2 calls out of 12 calls: 5 calls + interval reset + 5 calls + 2 calls")
+    public void shouldFailOn12CallsWithIntervalReset() throws InterruptedException {
         ApiLimiter.registerApis(new ApiConfig(API_NAME, 5, 3 * 1000));
 
         List<Boolean> consumers = new ArrayList<>(10);

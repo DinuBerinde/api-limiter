@@ -11,8 +11,8 @@ public class LimiterTest {
     private final static String TOKEN = "alportughjl";
 
     @Test
-    @DisplayName("MaxCalls = 5, Interval = 10sec -> Should consume 5 calls")
-    public void shouldConsume5Calls() {
+    @DisplayName("MaxCalls = 5, Interval = 10sec -> Should allow 5 calls")
+    public void shouldAllow5Calls() {
         Limiter limiter = new Limiter(new ApiConfig("test"));
 
         List<Boolean> consumers = new ArrayList<>(5);
@@ -24,7 +24,7 @@ public class LimiterTest {
     }
 
     @Test
-    @DisplayName("MaxCalls = 5, Interval = 10sec -> Should fail on consuming 6 calls")
+    @DisplayName("MaxCalls = 5, Interval = 10sec -> Should fail consuming 1 call out of 6 calls")
     public void shouldFailOn6Calls() {
         Limiter limiter = new Limiter(new ApiConfig("test"));
 
@@ -38,8 +38,8 @@ public class LimiterTest {
     }
 
     @Test
-    @DisplayName("MaxCalls = 8, Interval = 5sec -> Should consume 8 calls")
-    public void shouldConsume8Calls() {
+    @DisplayName("MaxCalls = 8, Interval = 5sec -> Should allow 8 calls")
+    public void shouldAllow8Calls() {
         Limiter limiter = new Limiter(new ApiConfig("test", 8, 5 * 1000));
 
         List<Boolean> consumers = new ArrayList<>(8);
@@ -51,7 +51,7 @@ public class LimiterTest {
     }
 
     @Test
-    @DisplayName("MaxCalls = 8, Interval = 5sec -> Should fail on consuming 10 calls")
+    @DisplayName("MaxCalls = 8, Interval = 5sec -> Should fail consuming 2 calls out of 10 calls")
     public void shouldFailOn10Calls() {
         Limiter limiter = new Limiter(new ApiConfig("test",8, 5 * 1000));
 
@@ -67,8 +67,8 @@ public class LimiterTest {
 
 
     @Test
-    @DisplayName("MaxCalls = 5, Interval = 3sec -> Should consume 10 calls: 5 calls + interval reset + 5 calls")
-    public void shouldConsume10CallsWithIntervalReset() throws InterruptedException {
+    @DisplayName("MaxCalls = 5, Interval = 3sec -> Should allow 10 calls: 5 calls + interval reset + 5 calls")
+    public void shouldAllow10CallsWithIntervalReset() throws InterruptedException {
         Limiter limiter = new Limiter(new ApiConfig("test", 5, 3 * 1000));
 
         List<Boolean> consumers = new ArrayList<>(10);
@@ -84,7 +84,7 @@ public class LimiterTest {
     }
 
     @Test
-    @DisplayName("MaxCalls = 5, Interval = 3sec -> Should fail by consuming 12 calls: 5 calls + interval reset + 5 calls + 2 calls")
+    @DisplayName("MaxCalls = 5, Interval = 3sec -> Should fail consuming 2 calls out of 12 calls: 5 calls + interval reset + 5 calls + 2 calls")
     public void shouldFailOn12CallsWithIntervalReset() throws InterruptedException {
         Limiter limiter = new Limiter(new ApiConfig("test", 5, 3 * 1000));
 
