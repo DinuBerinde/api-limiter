@@ -1,5 +1,11 @@
 package api.limiter.internal;
 
+import net.jcip.annotations.Immutable;
+
+/**
+ * Class to keep track of the number of calls and time for an API.
+ */
+@Immutable
 class ApiCall {
     private final int numberOfCalls;
     private final long time;

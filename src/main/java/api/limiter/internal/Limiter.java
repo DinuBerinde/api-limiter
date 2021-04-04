@@ -1,8 +1,14 @@
 package api.limiter.internal;
 
+import net.jcip.annotations.ThreadSafe;
+
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Thread safe class limit API calls.
+ */
+@ThreadSafe
 public final class Limiter {
     private final Map<String, ApiCall> limits = new HashMap<>();
     private final ApiConfig apiConfig;
@@ -12,9 +18,10 @@ public final class Limiter {
     }
 
     /**
-     * Consume an api call on behalf of the specified token.
+     * Consumes an API call on behalf of the specified token.
      * @param token the token
-     * @return true if consumed successfully, false if the number of api calls exceeded the configured api interval
+     * @return true if consumed successfully, false if the number of the current API call exceeds
+     * the configured API maximum calls in the configured API interval
      */
     public boolean consume(String token) {
 
@@ -40,17 +47,17 @@ public final class Limiter {
     }
 
     /**
-     * It checks whether the api call exceeded the number of calls of the configured api.
+     * It checks whether the current API call exceeded the number of maximum calls of the configured API.
      * @param apiCall the api call
-     * @return true if the number of calls exceeded, false otherwise
+     * @return true if the current API call exceeded the number of maximum calls, false otherwise
      */
     private boolean callLimitExceeded(ApiCall apiCall) {
         return apiCall.getNumberOfCalls() + 1 > apiConfig.getMaxCalls();
     }
 
     /**
-     * It checks whether the current api call is not expired.
-     * It checks whether the time of the call is eligible with respect to the configured interval of time of the api.
+     * It checks whether the current API call is not expired, hence it checks whether
+     * the time of the call is eligible with respect to the configured time interval of the API.
      * @param apiCall the api call
      * @return true if the interval expired, false otherwise
      */

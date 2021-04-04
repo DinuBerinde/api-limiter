@@ -2,11 +2,17 @@ package api.limiter;
 
 import api.limiter.internal.ApiConfig;
 import api.limiter.internal.Limiter;
+import net.jcip.annotations.ThreadSafe;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Thread safe class to consume and limit API calls on behalf of a client without
+ * exceeding the API's maximum number of calls in a given time interval.
+ */
+@ThreadSafe
 public final class ApiLimiter {
     private final static ApiLimiter INSTANCE = new ApiLimiter();
     private final Map<String, Limiter> limiters = new HashMap<>();
@@ -14,7 +20,7 @@ public final class ApiLimiter {
     private ApiLimiter() {}
 
     /**
-     * Register the apis to limit.
+     * It registers the APIs to limit.
      * @param apis the apis
      */
     public static void registerApis(ApiConfig... apis) {
@@ -22,10 +28,11 @@ public final class ApiLimiter {
     }
 
     /**
-     * Consumes an api on behalf of the specified token.
+     * Consumes an API on behalf of the specified token.
      * @param apiName the api name
      * @param token the token
-     * @return true if consumed successfully, false if the number of api calls exceeded the configured api interval
+     * @return true if consumed successfully, false if the number of the current API call exceeds
+     * the configured API maximum calls in the configured API interval
      */
     public static boolean consume(String apiName, String token) {
 

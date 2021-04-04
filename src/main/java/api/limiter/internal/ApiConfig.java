@@ -1,5 +1,11 @@
 package api.limiter.internal;
 
+import net.jcip.annotations.Immutable;
+
+/**
+ * Class to configure the maximum number of calls in a time interval for an API.
+ */
+@Immutable
 public final class ApiConfig {
     private final static int MAX_CALLS_DEFAULT = 5;
     private final static long INTERVAL_DEFAULT = 10 * 1000;
