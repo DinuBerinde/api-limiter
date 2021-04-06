@@ -1,4 +1,4 @@
-package api.limiter.internal;
+package com.dinuberinde.api.limiter.internal;
 
 import net.jcip.annotations.Immutable;
 

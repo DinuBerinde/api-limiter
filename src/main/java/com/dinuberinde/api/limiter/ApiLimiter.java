@@ -1,7 +1,7 @@
-package api.limiter;
+package com.dinuberinde.api.limiter;
 
-import api.limiter.internal.ApiConfig;
-import api.limiter.internal.Limiter;
+import com.dinuberinde.api.limiter.internal.ApiConfig;
+import com.dinuberinde.api.limiter.internal.Limiter;
 import net.jcip.annotations.ThreadSafe;
 
 import java.util.Arrays;

@@ -1,4 +1,4 @@
-package api.limiter;
+package com.dinuberinde.api.limiter;
 
 public class ApiLimiterException extends RuntimeException {
 
