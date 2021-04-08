@@ -1,6 +1,6 @@
 import com.dinuberinde.api.limiter.ApiLimiter;
 import com.dinuberinde.api.limiter.ApiLimiterException;
-import com.dinuberinde.api.limiter.internal.ApiConfig;
+import com.dinuberinde.api.limiter.ApiConfig;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -49,6 +49,31 @@ public class ApiLimiterAllClientsTest {
     public void shouldAllowCallOnBehalfASpecificClient() {
         ApiLimiter.registerApis(new ApiConfig(API_NAME));
         Assertions.assertTrue(ApiLimiter.consume(API_NAME));
+    }
+
+    @Test
+    @DisplayName("MaxCalls = 5, Timeframe = 10sec -> Should allow 5 calls to an API for 3 clients")
+    public void shouldAllow5CallsSameApiMultipleClients() {
+        ApiLimiter.registerApis(ApiConfig.of(
+                API_NAME,
+                5,
+                10 * 1000,
+                "c1",
+                "c2",
+                "c3"
+                )
+        );
+
+        List<Boolean> consumers = new ArrayList<>(15);
+        for (int c = 1; c < 4; c++) {
+            for (int i = 1; i <= 5; i++) {
+                consumers.add(ApiLimiter.consume(API_NAME, "c" + c));
+            }
+        }
+
+        Assertions.assertTrue(consumers.stream().allMatch(p -> p));
+        // should fail consuming api
+        Assertions.assertFalse(ApiLimiter.consume(API_NAME, "c1"));
     }
 
     @Test

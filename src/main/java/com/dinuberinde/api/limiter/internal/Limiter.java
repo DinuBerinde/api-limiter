@@ -1,5 +1,6 @@
 package com.dinuberinde.api.limiter.internal;
 
+import com.dinuberinde.api.limiter.ApiConfig;
 import net.jcip.annotations.ThreadSafe;
 
 import java.util.HashMap;

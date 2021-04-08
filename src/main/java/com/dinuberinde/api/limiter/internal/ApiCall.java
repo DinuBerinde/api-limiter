@@ -3,7 +3,7 @@ package com.dinuberinde.api.limiter.internal;
 import net.jcip.annotations.Immutable;
 
 /**
- * Class to keep track of the number of calls and time made by a clinet for an API.
+ * Class to keep track of the number of calls and time made by a client for an API.
  */
 @Immutable
 class ApiCall {

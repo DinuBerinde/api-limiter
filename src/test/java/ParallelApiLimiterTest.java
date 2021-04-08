@@ -1,5 +1,5 @@
 import com.dinuberinde.api.limiter.ApiLimiter;
-import com.dinuberinde.api.limiter.internal.ApiConfig;
+import com.dinuberinde.api.limiter.ApiConfig;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

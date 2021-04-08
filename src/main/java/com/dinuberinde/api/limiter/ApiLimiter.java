@@ -1,6 +1,5 @@
 package com.dinuberinde.api.limiter;
 
-import com.dinuberinde.api.limiter.internal.ApiConfig;
 import com.dinuberinde.api.limiter.internal.Limiter;
 import net.jcip.annotations.ThreadSafe;
 
@@ -10,7 +9,7 @@ import java.util.Map;
 
 /**
  * Thread safe class to consume API calls on behalf of a client or clients and
- * it limits the API calls that a client can make within a certain timeframe.
+ * it limits the API calls that a client can consume within a certain timeframe.
  */
 @ThreadSafe
 public final class ApiLimiter {
