@@ -3,9 +3,7 @@ package com.dinuberinde.api.limiter;
 import com.dinuberinde.api.limiter.internal.Limiter;
 import net.jcip.annotations.ThreadSafe;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Thread safe class to consume API calls on behalf of a client or clients and
@@ -26,6 +24,27 @@ public final class ApiLimiter {
         synchronized (INSTANCE) {
             Arrays.stream(apis).forEach(api -> INSTANCE.apiLimiterMap.computeIfAbsent(api.getApiName(), k -> new HashMap<>()).put(api.getClient(), new Limiter(api)));
         }
+    }
+
+    /**
+     * It returns the name of configured APIs.
+     * @return the list with the names of the APIs
+     */
+    public static List<String> getConfiguredApisName() {
+        return new ArrayList<>(INSTANCE.apiLimiterMap.keySet());
+    }
+
+    /**
+     * It checks whether an api is configured.
+     * @param apiName the api name
+     * @return true if the api is configured, false otherwise
+     */
+    public static boolean isApiConfigured(String apiName) {
+        if (apiName == null) {
+            return false;
+        }
+
+        return INSTANCE.apiLimiterMap.containsKey(apiName);
     }
 
     /**
