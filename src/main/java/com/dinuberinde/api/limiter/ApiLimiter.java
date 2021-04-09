@@ -71,10 +71,10 @@ public final class ApiLimiter {
         }
 
         Limiter limiter;
-        synchronized (INSTANCE) {
-            if (INSTANCE.apiLimiterMap.containsKey(apiName)) {
-                Map<String, Limiter> clientLimiterMap = INSTANCE.apiLimiterMap.get(apiName);
+        if (INSTANCE.apiLimiterMap.containsKey(apiName)) {
+            Map<String, Limiter> clientLimiterMap = INSTANCE.apiLimiterMap.get(apiName);
 
+            synchronized (clientLimiterMap) {
                 if (clientLimiterMap.containsKey(ApiConfig.ALL_CLIENTS)) {
                     limiter = clientLimiterMap.get(ApiConfig.ALL_CLIENTS);
                 } else if (client == null) {
@@ -84,10 +84,9 @@ public final class ApiLimiter {
                 } else {
                     throw new ApiLimiterException(String.format("Client %s non found for API %s", client, apiName));
                 }
-
-            } else {
-                throw new ApiLimiterException(String.format("API %s not registered", apiName));
             }
+        } else {
+            throw new ApiLimiterException(String.format("API %s not registered", apiName));
         }
 
         return limiter.consume(client);
