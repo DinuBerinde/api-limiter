@@ -14,7 +14,7 @@ import java.util.stream.IntStream;
 
 
 public class ParallelApiLimiterAllClientsTest {
-    private final static String API_NAME = "/api/parallel-test";
+    private final static String API_NAME = "/api/parallel-all-clients-test";
     private final static String CLIENT = "alkmncbvxerop";
 
 
