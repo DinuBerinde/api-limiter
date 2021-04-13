@@ -26,7 +26,7 @@ public final class ApiConfig {
     /**
      * Configuration of the API to make maxCalls calls in a time interval
      * of interval seconds on behalf of a client.
-     * @param apiName the api name
+     * @param apiName the api name. Should end with * if intended as root api
      * @param maxCalls the max calls allowed in a given timeframe
      * @param timeframe the timeframe in which a client can consume API calls, in seconds
      * @param client the client name or * if intended for all clients
@@ -41,7 +41,7 @@ public final class ApiConfig {
     /**
      * Configuration of the API to make maxCalls calls in a time interval
      * of interval seconds. The API configuration applies to ALL clients.
-     * @param apiName the api name
+     * @param apiName the api name. Should end with * if intended as root api
      * @param maxCalls the max calls allowed in a given timeframe
      * @param timeframe the timeframe in which a client can consume API calls, in seconds.
      */
@@ -52,7 +52,7 @@ public final class ApiConfig {
     /**
      * Configuration of the Api.
      * The default configuration allows 5 calls to all clients in a timeframe of 10 seconds.
-     * @param apiName the api name
+     * @param apiName the api name. Should end with * if intended as root api
      */
     public ApiConfig(String apiName) {
         this(apiName, DEFAULT_MAX_CALLS, DEFAULT_TIMEFRAME);
@@ -61,7 +61,7 @@ public final class ApiConfig {
     /**
      * Configuration of the Api.
      * The default configuration allows 5 calls to a client in a timeframe of 10 seconds.
-     * @param apiName the api name
+     * @param apiName the api name. Should end with * if intended as root api
      * @param client the token
      */
     public ApiConfig(String apiName, String client) {
@@ -86,7 +86,7 @@ public final class ApiConfig {
 
     /**
      * Helper method to build an array of {@link ApiConfig} for the given clients.
-     * @param apiName the api name
+     * @param apiName the api name. Should end with * if intended as root api
      * @param maxCalls the max calls allowed in a given timeframe
      * @param timeframe the timeframe in which a client can consume API calls, in seconds
      * @param clients the clients

@@ -13,6 +13,7 @@ import java.util.*;
 public final class ApiLimiter {
     private final static ApiLimiter INSTANCE = new ApiLimiter();
     private final Map<String, Map<String, Limiter>> apiLimiterMap = new HashMap<>();
+    private final List<String> rootApis = new ArrayList<>();
 
     private ApiLimiter() {}
 
@@ -22,7 +23,12 @@ public final class ApiLimiter {
      */
     public static void registerApis(ApiConfig... apis) {
         synchronized (INSTANCE) {
-            Arrays.stream(apis).forEach(api -> INSTANCE.apiLimiterMap.computeIfAbsent(api.getApiName(), k -> new HashMap<>()).put(api.getClient(), new Limiter(api)));
+            Arrays.stream(apis).forEach(api -> {
+                INSTANCE.apiLimiterMap.computeIfAbsent(api.getApiName(), k -> new HashMap<>()).put(api.getClient(), new Limiter(api));
+                if (api.getApiName().endsWith("*")) {
+                    INSTANCE.rootApis.add(api.getApiName().substring(0, api.getApiName().length() - 1));
+                }
+            });
         }
     }
 
@@ -52,6 +58,7 @@ public final class ApiLimiter {
      * @param apiName the api name
      * @return true if consumed successfully, false if the current API call exceeds
      * the configured API maximum calls in the configured API time interval
+     * @throws ApiLimiterException if api name is null or not registered, or client is null or not found
      */
     public static boolean consume(String apiName) {
         return consume(apiName, ApiConfig.ALL_CLIENTS);
@@ -63,11 +70,19 @@ public final class ApiLimiter {
      * @param client the client name. Ignored if the API was configured for all clients
      * @return true if consumed successfully, false if the current API call exceeds
      * the configured API maximum calls within the configured API timeframe
+     * @throws ApiLimiterException if api name is null or not registered, or client is null or not found
      */
     public static boolean consume(String apiName, String client) {
 
         if (apiName == null) {
             throw new ApiLimiterException("API name cannot be null");
+        }
+
+        for (String rootApi: INSTANCE.rootApis) {
+            if (apiName.startsWith(rootApi)) {
+                apiName = rootApi + "*";
+                break;
+            }
         }
 
         Limiter limiter;
@@ -77,6 +92,7 @@ public final class ApiLimiter {
             synchronized (clientLimiterMap) {
                 if (clientLimiterMap.containsKey(ApiConfig.ALL_CLIENTS)) {
                     limiter = clientLimiterMap.get(ApiConfig.ALL_CLIENTS);
+                    client = ApiConfig.ALL_CLIENTS;
                 } else if (client == null) {
                     throw new ApiLimiterException("Client cannot be null");
                 } else if (clientLimiterMap.containsKey(client)) {
