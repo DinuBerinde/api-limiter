@@ -13,8 +13,8 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 
-public class ParallelApiLimiterTest {
-    private final static String API_NAME = "/api/test";
+public class ParallelApiLimiterAllClientsTest {
+    private final static String API_NAME = "/api/parallel-test";
     private final static String CLIENT = "alkmncbvxerop";
 
 
@@ -141,7 +141,7 @@ public class ParallelApiLimiterTest {
 
         @Override
         public Boolean get() {
-            boolean consumed = ApiLimiter.consume(API_NAME, CLIENT);
+            boolean consumed = this.threadNum % 2 ==0 ? ApiLimiter.consume(API_NAME, CLIENT) : ApiLimiter.consume(API_NAME);
             if (consumed)
                 System.out.println(String.format("[Task %s] consumed API", threadNum));
             else

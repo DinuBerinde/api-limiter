@@ -12,9 +12,9 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class ParallelMultiApiLimiterTest {
+public class ParallelMultiApiLimiterAllClientsTest {
     private final static int NUMBER_OF_APIS = 5;
-    private final static String API_NAME = "/api/test";
+    private final static String API_NAME = "/api/multi-api-parallel-test";
     private final static String CLIENT = "alkmncbvxerop";
 
     @Test
@@ -148,7 +148,7 @@ public class ParallelMultiApiLimiterTest {
 
         @Override
         public Boolean get() {
-            boolean consumed = ApiLimiter.consume(API_NAME + "/" + restIndex, CLIENT);
+            boolean consumed = this.restIndex % 2 == 0 ? ApiLimiter.consume(API_NAME + "/" + restIndex, CLIENT) : ApiLimiter.consume(API_NAME + "/" + restIndex);
             if (consumed)
                 System.out.println(String.format("[Task %s] consumed API %s", threadNum, API_NAME + "/" + restIndex));
             else
