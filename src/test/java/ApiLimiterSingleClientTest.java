@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ApiLimiterSpecificClientTest {
-    private final static String API_NAME = "/api/specific-client-test";
+public class ApiLimiterSingleClientTest {
+    private final static String API_NAME = "/api/single-client-test";
     private final static String CLIENT = "alkmncbvxerop";
 
     @Test
@@ -65,7 +65,7 @@ public class ApiLimiterSpecificClientTest {
         try {
             ApiLimiter.consume(API_NAME);
         } catch (ApiLimiterException e) {
-            Assertions.assertEquals("Client * non found for API /api/specific-client-test", e.getMessage());
+            Assertions.assertEquals("Client * non found for API /api/single-client-test", e.getMessage());
             return;
         }
 
