@@ -15,8 +15,7 @@
     </properties>
 
     <name>api-limiter</name>
-    <description>A thread safe Java library to limit access to an API on behalf
-        of a specific client or all clients in a certain timeframe</description>
+    <description>A thread safe Java library to limit client access to APIs in a certain timeframe</description>
     <url>https://github.com/DinuBerinde/api-limiter</url>
     <licenses>
         <license>

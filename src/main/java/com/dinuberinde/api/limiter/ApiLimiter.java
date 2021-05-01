@@ -6,8 +6,8 @@ import net.jcip.annotations.ThreadSafe;
 import java.util.*;
 
 /**
- * Thread safe class to consume API calls on behalf of a client or clients and
- * it limits the API calls that a client can consume within a certain timeframe.
+ * Class to consume API calls on behalf of a client and
+ * to limit the API calls that a client can consume within a certain timeframe.
  */
 @ThreadSafe
 public final class ApiLimiter {
@@ -54,10 +54,10 @@ public final class ApiLimiter {
     }
 
     /**
-     * Consumes an API on behalf of all clients.
+     * It consumes an API.
      * @param apiName the api name
      * @return true if consumed successfully, false if the current API call exceeds
-     * the configured API maximum calls in the configured API time interval
+     * the configured API maximum calls in the configured API timeframe
      * @throws ApiLimiterException if api name is null or not registered, or client is null or not found
      */
     public static boolean consume(String apiName) {
@@ -65,9 +65,9 @@ public final class ApiLimiter {
     }
 
     /**
-     * Consumes an API on behalf of a specific client.
+     * It consumes an API on behalf of a specific client.
      * @param apiName the api name
-     * @param client the client name. Ignored if the API was configured for all clients
+     * @param client the client name (ignored if the API was configured for all clients)
      * @return true if consumed successfully, false if the current API call exceeds
      * the configured API maximum calls within the configured API timeframe
      * @throws ApiLimiterException if api name is null or not registered, or client is null or not found

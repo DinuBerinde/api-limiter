@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Thread safe class to limit API calls that a client can make within a certain timeframe.
+ * Class to limit API calls that a client can make within a certain timeframe.
  */
 @ThreadSafe
 public final class Limiter {
@@ -20,7 +20,7 @@ public final class Limiter {
     }
 
     /**
-     * Consumes an API call on behalf of a client.
+     * It consumes an API call on behalf of a client.
      * @param client the client
      * @return true if consumed successfully, false if the current API call exceeds
      * the configured API maximum calls within the configured API timeframe
