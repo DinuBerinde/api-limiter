@@ -134,5 +134,6 @@ if (!ApiLimiter.consume("/api/my-root-api-1/test")) {
 }
 ```
 
-
+## Author
+Dinu Berinde <dinu2193@gmail.com>
 
